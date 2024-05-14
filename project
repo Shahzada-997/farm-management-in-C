@@ -1,0 +1,156 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_ANIMALS 100
+#define MAX_SPECIES_LENGTH 50
+#define MAX_USERNAME_LENGTH 20
+#define MAX_PASSWORD_LENGTH 20
+
+// Struct to hold animal information
+struct Animal {
+    char species[MAX_SPECIES_LENGTH];
+    int age;
+    char health_status[20];
+};
+
+// Function prototypes
+void saveAnimal(struct Animal newAnimal);
+void viewAnimals();
+void deleteAnimal(int index);
+int login();
+void logout();
+
+int animalCount = 0;
+struct Animal animals[MAX_ANIMALS];
+char username[MAX_USERNAME_LENGTH];
+char password[MAX_PASSWORD_LENGTH];
+int isLoggedIn = 0;
+
+int main() {
+    int choice;
+    
+    do {
+        printf("\nMenu:\n");
+        printf("1. Login\n");
+        printf("2. Add Animal\n");
+        printf("3. View Animals\n");
+        printf("4. Delete Animal\n");
+        printf("5. Logout\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        
+        switch (choice) {
+            case 1:
+                isLoggedIn = login();
+                break;
+            case 2: {
+                if (isLoggedIn) {
+                    struct Animal newAnimal;
+                    printf("\nEnter species: ");
+                    scanf("%s", newAnimal.species);
+                    printf("Enter age: ");
+                    scanf("%d", &newAnimal.age);
+                    printf("Enter health status: ");
+                    scanf("%s", newAnimal.health_status);
+                    saveAnimal(newAnimal);
+                } else {
+                    printf("\nPlease login first.\n");
+                }
+                break;
+            }
+            case 3:
+                if (isLoggedIn) {
+                    viewAnimals();
+                } else {
+                    printf("\nPlease login first.\n");
+                }
+                break;
+            case 4:
+                if (isLoggedIn) {
+                    int index;
+                    printf("\nEnter index of animal to delete: ");
+                    scanf("%d", &index);
+                    deleteAnimal(index);
+                } else {
+                    printf("\nPlease login first.\n");
+                }
+                break;
+            case 5:
+                if (isLoggedIn) {
+                    logout();
+                    isLoggedIn = 0;
+                } else {
+                    printf("\nPlease login first.\n");
+                }
+                break;
+            case 6:
+                printf("\nExiting...\n");
+                break;
+            default:
+                printf("\nInvalid choice. Please try again.\n");
+        }
+    } while (choice != 6);
+    
+    return 0;
+}
+
+void saveAnimal(struct Animal newAnimal) {
+    if (animalCount < MAX_ANIMALS) {
+        animals[animalCount++] = newAnimal;
+        printf("\nAnimal added successfully.\n");
+    } else {
+        printf("\nAnimal database is full.\n");
+    }
+}
+
+void viewAnimals() {
+    if (animalCount == 0) {
+        printf("\nNo animals to display.\n");
+    } else {
+        printf("\nAnimals:\n");
+        for (int i = 0; i < animalCount; i++) {
+            printf("Species: %s, Age: %d, Health Status: %s\n", animals[i].species, animals[i].age, animals[i].health_status);
+        }
+    }
+}
+
+void deleteAnimal(int index) {
+    if (index >= 0 && index < animalCount) {
+        for (int i = index; i < animalCount - 1; i++) {
+            animals[i] = animals[i + 1];
+        }
+        animalCount--;
+        printf("\nAnimal deleted successfully.\n");
+    } else {
+        printf("\nInvalid index.\n");
+    }
+}
+
+int login() {
+    printf("\nEnter username: ");
+    scanf("%s", username);
+    
+    // Prompt for password
+    printf("Enter password: ");
+    scanf("%s", password);
+
+    // Set the fixed password and username
+     char fixed_username[MAX_USERNAME_LENGTH] = "nusrat";
+    char fixed_password[MAX_PASSWORD_LENGTH] = "87875";
+   
+    
+    // Check if the entered username and password match the fixed username and password
+    if (strcmp(username, fixed_username) == 0 && strcmp(password, fixed_password) == 0) {
+        printf("\nLogin successful.\n");
+        return 1;
+    } else {
+        printf("\nInvalid username or password.\n");
+        return 0;
+    }
+}
+
+void logout() {
+    printf("\nLogged out successfully.\n");
+}
