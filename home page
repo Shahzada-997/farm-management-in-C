@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_USERNAME_LENGTH 20
+#define MAX_PASSWORD_LENGTH 20
+
+char username[MAX_USERNAME_LENGTH];
+char password[MAX_PASSWORD_LENGTH];
+
+int login();
+void logout();
+void displayWelcomeMessage();
+
+int main() {
+    displayWelcomeMessage(); // Display the welcome message initially
+    
+    int isLoggedIn = 0;
+    int choice;
+
+    do {
+        printf("\nMenu:\n");
+        printf("1. Login\n");
+        printf("2. Logout\n");
+        printf("3. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                if (!isLoggedIn)
+                    isLoggedIn = login();
+                else
+                    printf("\nYou are already logged in.\n");
+                break;
+            case 2:
+                if (isLoggedIn)
+                    logout();
+                else
+                    printf("\nYou are not logged in.\n");
+                isLoggedIn = 0;
+                break;
+            case 3:
+                printf("\nExiting...\n");
+                break;
+            default:
+                printf("\nInvalid choice. Please try again.\n");
+        }
+    } while (choice != 3);
+
+    return 0;
+}
+
+void displayWelcomeMessage() {
+    printf("Welcome to Shahzada Farm Management System!\n");
+}
+
+int login() {
+    printf("\nEnter username: ");
+    scanf("%s", username);
+
+    // Prompt for password
+    printf("Enter password: ");
+    scanf("%s", password);
+
+    // Set the fixed password and username
+    char fixed_username[MAX_USERNAME_LENGTH] = "shahzada";
+    char fixed_password[MAX_PASSWORD_LENGTH] = "87875";
+
+    // Check if the entered username and password match the fixed username and password
+    if (strcmp(username, fixed_username) == 0 && strcmp(password, fixed_password) == 0) {
+        printf("\nLogin successful.\n");
+        return 1;
+    } else {
+        printf("\nInvalid username or password.\n");
+        return 0;
+    }
+}
+
+void logout() {
+    printf("\nLogged out successfully.\n");
+}
